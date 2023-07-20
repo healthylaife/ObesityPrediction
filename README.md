@@ -13,6 +13,32 @@ Interested scholars can access the data by contacting Nemours Biomedical Researc
 	is the file used to run descriptive analysis on the selected cohort.
 - **dl_train_sig_obs.py**
   consists of code to create batches of data according to batch_size and create, train and test the model.
+  Below are the function details -
+  - **create_model**
+    used to call mimic_model_sig_obs.py file to create and initiate the model architecture
+  - **decXY**
+    create input vector for decoder
+  - **encXY**
+    create input vector for encoder
+  - **dl_train**
+    calls all internal functions to train the model
+  - **dl_test**
+    calls all internal functions to test the model
+  - **model_test**
+    test the model to collect performance metrics
+  - **test_read**
+    reads the files created by model_test
+  - **display_output**
+    used to display the output of test results
+  - **model_test_full**
+    test the model for feature importance interpretation
+  - **interpret**
+    create files with results of feature importance interpretation and save the files
+  - **interpret_read**
+    reads the files creates by interpret function and calls display_contri function to display the output
+  - **display_contri**
+    used to display feature importance
+	
 - **dl_train_sig_obs_geo.py**
   consists of code to create batches of data for temporal and geographic validation of the model.
 - **mimic_model_sig_obs.py**
