@@ -1561,9 +1561,7 @@ class DL_models():
         tot=ind_imp_all['impmean'].sum()
         ind_imp_all['impmean']=ind_imp_all['impmean']/tot
         ind_imp_all=ind_imp_all.sort_values(by='impmean',ascending=True)
-        ind_imp_all2 = {'feat': 'Ethnicity:Hispanic', 'impmean': 0.005, 'impcount': 1}
         ind_imp_all = ind_imp_all.append(ind_imp_all2, ignore_index = True)
-        ind_imp_all2 = {'feat': 'FH:Depression', 'impmean': 0.004, 'impcount': 1}
         ind_imp_all.loc[ind_imp_all['feat']=='Family history of cardiovascular disease in first degree male relative less than 55 years of age','feat']='FH:Cardiovascular disease in first degree male relative'
         ind_imp_all = ind_imp_all.append(ind_imp_all2, ignore_index = True)
         ind_imp_all=ind_imp_all.sort_values(by='impmean',ascending=True)
