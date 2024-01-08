@@ -107,7 +107,6 @@ def encXY(data):
 
 def decXY(data):
     dec = data['dec']
-    mask = data['mask']
 
     dec = dec.fillna(0)
     dec = dec.apply(pd.to_numeric)
@@ -115,9 +114,11 @@ def decXY(data):
 
     dec_feat = dec.iloc[:, 2:].values
 
-    mask = mask['value'].values
-
     ids_len = len(pd.unique(dec['person_id']))
+
+    mask = np.ones((ids_len * 8,))
+    # mask = mask['value'].values
+
     # Reshape to 3-D
     dec_feat = torch.tensor(dec_feat)
     dec_feat = torch.reshape(dec_feat, (ids_len, 8, dec_feat.shape[1]))
@@ -142,10 +143,6 @@ if __name__ == '__main__':
     dec_df = pd.read_csv('./data/5/tt/dec_test.csv', header=0)
     dec_df = dec_df[dec_df['person_id'].isin(person_id)]
     data['dec'] = dec_df
-
-    mask_df = pd.read_csv('./data/4/tt/mask_test.csv', header=0)
-    mask_df = mask_df[mask_df['person_id'].isin(person_id)]
-    data['mask'] = mask_df
 
     net = torch.load('saved_models/obsNew_4.tar')
 
