@@ -41,7 +41,7 @@ class EncDec2(nn.Module):
         self.dec = Decoder2(self.device, self.feat_vocab_size, self.age_vocab_size, self.embed_size, self.rnn_size,
                             self.emb_feat, self.batch_size)
 
-    def forward(self, visualize_embed, find_contri, enc_feat, enc_len, enc_age, enc_demo, dec_feat, labels, mask):
+    def forward(self, visualize_embed, find_contri, enc_feat, enc_len, enc_age, enc_demo, dec_feat):
         if visualize_embed:
             features = torch.tensor(np.arange(0, 350))
             features = features.type(torch.LongTensor)
@@ -60,17 +60,11 @@ class EncDec2(nn.Module):
         dec_feat = self.emb_feat(dec_feat)
         dec_feat = torch.sum(dec_feat, 2)
 
-        dec_labels = self.emb_feat(labels)
 
         if find_contri:
-            dec_output, dec_prob, disc_input, kl_input, all_contri = self.dec(find_contri, contri, dec_feat, dec_labels,
-                                                                              code_output, code_h_n, code_c_n, enc_demo,
-                                                                              mask, labels)
+            dec_output, dec_prob, disc_input, kl_input, all_contri = self.dec(find_contri, contri, dec_feat, code_output, code_h_n, enc_demo)
         else:
-            dec_output, dec_prob, disc_input, kl_input = self.dec(find_contri, contri, dec_feat, dec_labels,
-                                                                  code_output, code_h_n, code_c_n, enc_demo, mask,
-                                                                  labels)
-
+            dec_output, dec_prob, disc_input, kl_input = self.dec(find_contri, contri, dec_feat, code_output, code_h_n, enc_demo)
         kl_input = torch.tensor(kl_input)
 
         disc_input = torch.stack(disc_input)
@@ -165,8 +159,7 @@ class Decoder2(nn.Module):
 
         self.attn = LSTMAttention(self.rnn_size)
 
-    def forward(self, find_contri, contri, featEmbed, labelsEmbed, encoder_outputs, h_n, c_n, enc_demo, mask, labels):
-
+    def forward(self, find_contri, contri, featEmbed, encoder_outputs, h_n, enc_demo):
         dec_output = []
         kl_input = []
         disc_input = []
